@@ -21,9 +21,9 @@ public class MovieCatalogResource {
     //private WebClient.Builder builder;
 
 
-    private static final String MOVIE_INFO = "http://localhost:8084/movies/";
+    private static final String MOVIE_INFO = "http://movie-info-service/movies/";
 
-    private static final String RATING_INFO = "http://localhost:8086/ratingsdata/users/";
+    private static final String RATING_INFO = "http://rating-data-service/ratingsdata/users/";
 
     public MovieCatalogResource(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
