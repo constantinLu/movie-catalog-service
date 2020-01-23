@@ -4,16 +4,26 @@ package com.sonuswaves.moviecatalogservice;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class SpringConfig {
 
+
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests().anyRequest().permitAll();
+//    }
+
     @Bean
     @LoadBalanced
     public RestTemplate getRestTemplate() {
-       return new RestTemplate();
+        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        clientHttpRequestFactory.setConnectTimeout(3000); // 3 seconds
+        //3 seconds time out if the request is not processed.
+        return new RestTemplate(clientHttpRequestFactory);
+
     }
 
 

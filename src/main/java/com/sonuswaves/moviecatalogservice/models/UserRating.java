@@ -4,9 +4,18 @@ import java.util.List;
 
 public class UserRating {
 
-  private List<Rating> userRating;
+    private String userId;
+    private List<Rating> userRating;
 
     public UserRating() {
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public List<Rating> getUserRating() {
