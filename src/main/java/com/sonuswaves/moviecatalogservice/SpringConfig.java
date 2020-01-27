@@ -20,7 +20,7 @@ public class SpringConfig {
     @LoadBalanced
     public RestTemplate getRestTemplate() {
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        clientHttpRequestFactory.setConnectTimeout(3000); // 3 seconds
+        clientHttpRequestFactory.setConnectTimeout(7000); // 3 seconds
         //3 seconds time out if the request is not processed.
         return new RestTemplate(clientHttpRequestFactory);
 

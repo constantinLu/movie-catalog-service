@@ -1,6 +1,7 @@
 package com.sonuswaves.moviecatalogservice.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.sonuswaves.moviecatalogservice.models.CatalogItem;
 import com.sonuswaves.moviecatalogservice.models.Movie;
 import com.sonuswaves.moviecatalogservice.models.Rating;
@@ -23,7 +24,11 @@ public class MovieInfoService {
         this.restTemplate = restTemplate;
     }
 
-    @HystrixCommand(fallbackMethod = "getFallBackCatalogItem")
+    @HystrixCommand(//fallbackMethod = "getFallBackCatalogItem",
+            commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value ="5"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000")})
     public CatalogItem getCatalogItem(Rating rating) {
         Movie movie = restTemplate.getForObject(MOVIE_INFO + rating.getMovieId(), Movie.class);
 
@@ -39,8 +44,8 @@ public class MovieInfoService {
 
 
     //fallback methods for more granural use.
-    public List<CatalogItem> getFallBackCatalogItem(Rating rating) {
-        return Arrays.asList(new CatalogItem("Movie not found", "", rating.getRating()));
+    public CatalogItem getFallBackCatalogItem(Rating rating) {
+        return new CatalogItem("Movie not found", "", rating.getRating());
     }
 
 

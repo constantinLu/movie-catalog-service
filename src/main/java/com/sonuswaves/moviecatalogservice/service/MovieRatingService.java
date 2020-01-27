@@ -1,6 +1,7 @@
 package com.sonuswaves.moviecatalogservice.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.sonuswaves.moviecatalogservice.models.Rating;
 import com.sonuswaves.moviecatalogservice.models.UserRating;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,19 @@ public class MovieRatingService {
         this.restTemplate = restTemplate;
     }
 
-    @HystrixCommand(fallbackMethod = "getFallBackUserRating")
+    @HystrixCommand(fallbackMethod = "getFallBackUserRating",
+            threadPoolKey = "ratingPool",
+            threadPoolProperties = {
+                    @HystrixProperty(name = "coreSize", value = "20"),
+                    @HystrixProperty(name = "maxQueueSize", value = "10")})
     public UserRating getUserRating(@PathVariable("userId") String userId) {
         return restTemplate.getForObject(RATING_INFO + userId,
                 UserRating.class);
     }
 
     /**
-     *  FallbackMethod from Hysterix
+     * FallbackMethod from Hysterix
+     *
      * @param userId user comming from the user
      * @return mocked value
      */

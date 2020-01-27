@@ -28,8 +28,7 @@ public class MovieCatalogResource {
 
     @GetMapping("/{userId}")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
-
-        UserRating ratings = movieRatingService.getFallBackUserRating(userId);
+        UserRating ratings = movieRatingService.getUserRating(userId);
         // For each movie ID, call movie info service and get details
         return ratings.getUserRating().stream()
                 .map(rating -> movieInfoService.getCatalogItem(rating))
